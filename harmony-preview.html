@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Client Preview — Harmony Horses</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;-webkit-font-smoothing:antialiased;font-family:'Lato',sans-serif;font-weight:300;background:#fff;color:#1a1a1a}
+a{text-decoration:none;color:inherit}
+button{font:inherit;cursor:pointer}
+::selection{background:#f5f5f5;color:#1a1a1a}
+
+/* LOCK */
+#lock{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.lock-img{overflow:hidden;position:relative}
+.lock-img img{width:100%;height:100%;object-fit:cover;object-position:center}
+.lock-img::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.15)}
+.lock-form{display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,8vw,80px);border-left:1px solid #e0e0e0}
+.lf-brand{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;letter-spacing:.08em;color:#1a1a1a;margin-bottom:2px}
+.lf-brand-sub{font-family:'Lato',sans-serif;font-size:9px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:#aaa;margin-bottom:48px}
+.lf-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:400;font-style:italic;color:#1a1a1a;line-height:1.1;margin-bottom:14px}
+.lf-desc{font-family:'Lato',sans-serif;font-size:14px;font-weight:300;color:#666;line-height:1.78;margin-bottom:32px;max-width:38ch}
+.lf-lbl{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:#aaa;display:block;margin-bottom:8px}
+.pw-wrap{position:relative;border-bottom:1px solid #1a1a1a;padding-bottom:10px;margin-bottom:6px}
+.pw-input{width:100%;background:transparent;border:none;font-family:'Lato',sans-serif;font-size:16px;font-weight:300;color:#1a1a1a;letter-spacing:.08em;outline:none;padding-right:28px}
+.pw-input::placeholder{color:#ccc;letter-spacing:0}
+.pw-input.err{border-bottom-color:#c0392b}
+.pw-eye{position:absolute;right:0;bottom:10px;background:none;border:none;color:#bbb;font-size:12px;cursor:pointer}
+.err-msg{font-family:'Lato',sans-serif;font-size:11px;font-weight:300;color:#c0392b;display:none;margin-bottom:12px}
+.err-msg.show{display:block}
+.unlock-btn{width:100%;padding:14px;background:#1a1a1a;color:#fff;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;border:none;cursor:pointer;margin-top:16px;transition:background .2s}
+.unlock-btn:hover:not(:disabled){background:#333}
+.unlock-btn:disabled{opacity:.55;cursor:not-allowed}
+.lf-foot{font-family:'Lato',sans-serif;font-size:11px;font-weight:300;color:#aaa;margin-top:16px;text-align:center}
+.lf-foot a{color:#1a1a1a;text-decoration:underline}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake .3s ease}
+
+/* DASHBOARD */
+#dash{display:none;background:#fff}
+.dash-nav{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,48px);border-bottom:1px solid #e0e0e0;position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97)}
+.dash-logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;letter-spacing:.06em;color:#1a1a1a}
+.dash-logo span{font-family:'Lato',sans-serif;font-size:8px;font-weight:300;letter-spacing:.24em;text-transform:uppercase;color:#aaa;display:block;margin-top:2px}
+.dash-right{display:flex;align-items:center;gap:16px}
+.dash-badge{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:#aaa;border:1px solid #e0e0e0;padding:4px 10px}
+.lock-again{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:#999;background:none;border:none;cursor:pointer;transition:color .15s}
+.lock-again:hover{color:#1a1a1a}
+
+.dash-body{max-width:1140px;margin:0 auto;padding:48px clamp(20px,5vw,48px) 80px}
+
+/* STATUS */
+.status-strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;margin-bottom:52px}
+.ss{padding:16px 0;border-right:1px solid #e0e0e0}
+.ss:last-child{border-right:none;padding-left:24px}
+.ss:nth-child(2),.ss:nth-child(3){padding-left:24px}
+.ss-lbl{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:#aaa;margin-bottom:5px}
+.ss-val{font-family:'Playfair Display',serif;font-size:15px;font-weight:400;color:#1a1a1a;margin-bottom:4px;line-height:1.3}
+.ss-tag{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.1em;text-transform:uppercase}
+.t-review{color:#9a6820}.t-done{color:#4a7a4a}.t-prog{color:#888}
+
+/* MESSAGE */
+.msg{border-left:1px solid #1a1a1a;padding-left:24px;margin-bottom:52px}
+.msg-from{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:#aaa;margin-bottom:10px}
+.msg-body{font-family:'Lato',sans-serif;font-size:14px;font-weight:300;color:#555;line-height:1.82}
+.msg-body p+p{margin-top:10px}
+.msg-body strong{color:#1a1a1a;font-weight:400}
+
+/* SECTION HEADING */
+.sec-lbl{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:#aaa;margin-bottom:20px}
+
+/* PAGE CARDS */
+.pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0;border-top:1px solid #e0e0e0;border-left:1px solid #e0e0e0;margin-bottom:52px}
+.pc{background:#fff;border-right:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;display:flex;flex-direction:column;cursor:pointer;transition:background .18s;overflow:hidden}
+.pc:hover{background:#fafaf8}
+.pc-img{height:150px;overflow:hidden;flex-shrink:0}
+.pc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s}
+.pc:hover .pc-img img{transform:scale(1.05)}
+.pc-body{padding:16px;display:flex;flex-direction:column;gap:5px;flex:1}
+.pc-num{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:#bbb}
+.pc-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:#1a1a1a;line-height:1.1}
+.pc-desc{font-family:'Lato',sans-serif;font-size:12px;font-weight:300;color:#888;line-height:1.65;flex:1}
+.pc-cta{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:#1a1a1a;border-bottom:1px solid #e0e0e0;padding-bottom:1px;width:fit-content;margin-top:10px;transition:border-color .15s}
+.pc:hover .pc-cta{border-color:#1a1a1a}
+
+/* NEEDS */
+.needs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0;border-top:1px solid #e0e0e0;border-left:1px solid #e0e0e0;margin-bottom:52px}
+.need{border-right:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;padding:18px;display:flex;gap:12px}
+.need-n{font-family:'Lato',sans-serif;font-size:9px;font-weight:400;letter-spacing:.12em;color:#bbb;flex-shrink:0;margin-top:1px}
+.need-txt{font-family:'Lato',sans-serif;font-size:12px;font-weight:300;color:#666;line-height:1.65}
+.need-txt strong{color:#1a1a1a;font-weight:400}
+
+/* FEEDBACK */
+.fb{border-top:1px solid #e0e0e0;padding-top:36px}
+.fb-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;font-style:italic;color:#1a1a1a;margin-bottom:6px}
+.fb-sub{font-family:'Lato',sans-serif;font-size:13px;font-weight:300;color:#888;margin-bottom:20px}
+.fb-ta{width:100%;background:transparent;border:none;border-bottom:1px solid #ccc;font-family:'Lato',sans-serif;font-size:14px;font-weight:300;color:#1a1a1a;padding:8px 0;resize:none;min-height:90px;outline:none;transition:border-color .2s;line-height:1.65;margin-bottom:16px;display:block}
+.fb-ta:focus{border-bottom-color:#1a1a1a}
+.fb-ta::placeholder{color:#ccc}
+.fb-btn{background:#1a1a1a;color:#fff;font-family:'Lato',sans-serif;font-size:11px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;padding:13px 32px;border:none;cursor:pointer;transition:background .18s}
+.fb-btn:hover{background:#333}
+.fb-ok{display:none;font-family:'Lato',sans-serif;font-size:11px;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:#4a7a4a;padding:12px 0;border-top:1px solid #e0e0e0;margin-top:12px}
+
+@media(max-width:800px){#lock{grid-template-columns:1fr}.lock-img{display:none}.lock-form{border-left:none}.status-strip{grid-template-columns:1fr 1fr}.pages{grid-template-columns:1fr}.needs{grid-template-columns:1fr}}
+@media(max-width:480px){.status-strip{grid-template-columns:1fr}.ss{border-right:none!important;padding-left:0!important}}
+</style>
+</head>
+<body>
+
+<!-- LOCK -->
+<div id="lock">
+  <div class="lock-img">
+    <img src="https://images.unsplash.com/photo-1534053000-56b6da7c3a98?w=1200&q=90&fit=crop&crop=center" alt="Harmony Horses"/>
+  </div>
+  <div class="lock-form">
+    <div class="lf-brand">Harmony Horses</div>
+    <div class="lf-brand-sub">Equestrian &middot; Finland</div>
+    <h2 class="lf-title">Client preview.</h2>
+    <p class="lf-desc">Enter the access code provided by Hassan to view your project dashboard and browse the complete website draft.</p>
+    <label class="lf-lbl" for="pwIn">Access code</label>
+    <div class="pw-wrap">
+      <input class="pw-input" type="password" id="pwIn" placeholder="Enter code…" autocomplete="current-password"/>
+      <button class="pw-eye" onclick="toggleEye()" type="button" id="eyeBtn">&#9679;&#9679;&#9679;</button>
+    </div>
+    <div class="err-msg" id="errMsg">Incorrect code — please try again.</div>
+    <button class="unlock-btn" id="unlockBtn" onclick="doUnlock()">View project</button>
+    <div class="lf-foot">No code? <a href="mailto:m.hassan.masood@hotmail.com">Contact Hassan</a></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash">
+  <div class="dash-nav">
+    <div class="dash-logo">Harmony Horses<span>Client Dashboard</span></div>
+    <div class="dash-right">
+      <div class="dash-badge">Draft &mdash; for review only</div>
+      <button class="lock-again" onclick="doLock()">Lock &hookleftarrow;</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <div class="status-strip">
+      <div class="ss"><div class="ss-lbl">Project</div><div class="ss-val">Harmony Horses website</div><div class="ss-tag t-prog">In progress</div></div>
+      <div class="ss"><div class="ss-lbl">Pages built</div><div class="ss-val">7 of 7 complete</div><div class="ss-tag t-done">All pages ready</div></div>
+      <div class="ss"><div class="ss-lbl">Stage</div><div class="ss-val">Client review</div><div class="ss-tag t-review">Your feedback needed</div></div>
+      <div class="ss"><div class="ss-lbl">Photos</div><div class="ss-val">Demo images only</div><div class="ss-tag t-review">Real photos needed</div></div>
+    </div>
+
+    <div class="msg">
+      <div class="msg-from">Message from Hassan</div>
+      <div class="msg-body">
+        <p>Welcome to your project preview. All <strong>7 pages of the Harmony Horses website are fully built</strong> and ready to browse. Click any page card below to open it — a thin preview bar will appear at the top of every page so you can move between pages and return to this dashboard at any time.</p>
+        <p>The photos throughout are <strong>placeholder images used to show layout and visual feel.</strong> They will all be replaced with your real stable photos, team portraits, and horse images before launch. Please review the <strong>design, structure, copy, and pricing</strong> and leave your feedback in the box at the bottom.</p>
+        <p>Main things I need from you: <strong>real photos</strong> of the stable, horses, and team &middot; <strong>staff names, titles, and short bios</strong> &middot; your <strong>exact address and phone number</strong> &middot; confirmation of the <strong>pricing</strong> on the services page &middot; your <strong>real upcoming events and dates.</strong></p>
+      </div>
+    </div>
+
+    <div class="sec-lbl">Browse the draft</div>
+    <div class="pages">
+      <div class="pc" onclick="goPage('harmony/index.html')">
+        <div class="pc-img"><img src="https://images.unsplash.com/photo-1534053000-56b6da7c3a98?w=500&q=70&fit=crop" alt=""/></div>
+        <div class="pc-body"><div class="pc-num">01 / 07</div><div class="pc-name">Homepage</div><p class="pc-desc">Full-viewport hero, mixed-case statement text, services index, editorial image blocks, testimonials, CTA.</p><div class="pc-cta">Open &rarr;</div></div>
+      </div>
+      <div class="pc" onclick="goPage('harmony/services.html')">
+        <div class="pc-img"><img src="https://images.unsplash.com/photo-1569017388730-020b5f80a004?w=500&q=70&fit=crop" alt=""/></div>
+        <div class="pc-body"><div class="pc-num">02 / 07</div><div class="pc-name">Services</div><p class="pc-desc">4 full service sections with alternating image / text layout, bullet lists, pricing, and boarding packages.</p><div class="pc-cta">Open &rarr;</div></div>
+      </div>
+      <div class="pc" onclick="goPage('harmony/facilities.html')">
+        <div class="pc-img"><img src="https://images.unsplash.com/photo-1592840496694-26d035b52b48?w=500&q=70&fit=crop" alt=""/></div>
+        <div class="pc-body"><div class="pc-num">03 / 07</div><div class="pc-name">Facilities</div><p class="pc-desc">Indoor arena, outdoor arena &amp; courses, stabling — each with full-bleed images and a detailed spec table.</p><div class="pc-cta">Open &rarr;</div></div>
+      </div>
+      <div class="pc" onclick="goPage('harmony/staff.html')">
+        <div class="pc-img"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=70&fit=crop&crop=top" alt=""/></div>
+        <div class="pc-body"><div class="pc-num">04 / 07</div><div class="pc-name">Our team</div><p class="pc-desc">6 team cards with portrait photos, roles, and bios. Values section. Join our team panel. Names are placeholders.</p><div class="pc-cta">Open &rarr;</div></div>
+      </div>
+      <div class="pc" onclick="goPage('harmony/events.html')">
+        <div class="pc-img"><img src="https://images.unsplash.com/photo-1548953359-59d56ae9fe5a?w=500&q=70&fit=crop" alt=""/></div>
+        <div class="pc-body"><div class="pc-num">05 / 07</div><div class="pc-name">Events</div><p class="pc-desc">Featured event, full 2025 calendar with 9 events and availability indicators, 3 recurring clinic cards.</p><div class="pc-cta">Open &rarr;</div></div>
+      </div>
+      <div class="pc" onclick="goPage('harmony/contact.html')">
+        <div class="pc-img"><img src="https://images.unsplash.com/photo-1559666126-84f389727b9a?w=500&q=70&fit=crop" alt=""/></div>
+        <div class="pc-body"><div class="pc-num">06 / 07</div><div class="pc-name">Contact</div><p class="pc-desc">Enquiry form (sends direct to inbox), contact info, opening hours grid, map placeholder.</p><div class="pc-cta">Open &rarr;</div></div>
+      </div>
+      <div class="pc" onclick="goPage('harmony/instagram.html')">
+        <div class="pc-img"><img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=500&q=70&fit=crop" alt=""/></div>
+        <div class="pc-body"><div class="pc-num">07 / 07</div><div class="pc-name">Instagram</div><p class="pc-desc">Profile, story highlights, full-bleed photo grid with hover effects, latest post with caption and hashtags.</p><div class="pc-cta">Open &rarr;</div></div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">What I need from you</div>
+    <div class="needs">
+      <div class="need"><div class="need-n">01</div><div class="need-txt"><strong>Photos</strong> — stable exterior, arenas, stalls, horses, paddocks, team portraits. At least 20 good-resolution images.</div></div>
+      <div class="need"><div class="need-n">02</div><div class="need-txt"><strong>Staff names &amp; bios</strong> — real names, official job titles, and a 2–3 sentence bio for each person.</div></div>
+      <div class="need"><div class="need-n">03</div><div class="need-txt"><strong>Contact details</strong> — full stable address, phone number, preferred email, and all social handles.</div></div>
+      <div class="need"><div class="need-n">04</div><div class="need-txt"><strong>Pricing</strong> — confirm, adjust, or remove the prices shown on the Services page.</div></div>
+      <div class="need"><div class="need-n">05</div><div class="need-txt"><strong>Events &amp; dates</strong> — your real upcoming events, clinics, and recurring sessions for the calendar.</div></div>
+      <div class="need"><div class="need-n">06</div><div class="need-txt"><strong>Instagram handle</strong> — your real @username so all social links point to the correct account.</div></div>
+    </div>
+
+    <div class="fb">
+      <div class="fb-title">Your feedback.</div>
+      <div class="fb-sub">Design, layout, copy, colours, structure — anything. Write it here and it goes straight to Hassan.</div>
+      <textarea class="fb-ta" id="fbText" placeholder="e.g. The design looks great &middot; Please change the pricing on page X &middot; I'd like to add a page for Y &middot; The font feels right…"></textarea>
+      <button class="fb-btn" onclick="doFeedback()">Send feedback</button>
+      <div class="fb-ok" id="fbOk">&#10003; Feedback sent &mdash; Hassan will be in touch soon.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const HASH='fd15e486656b8c4536fb32bc1a8e317c948ce0143f18715751f5414309666e89';
+const FSPREE='YOUR_FORM_ID';
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function doUnlock(){
+  const pw=document.getElementById('pwIn').value;const btn=document.getElementById('unlockBtn');const err=document.getElementById('errMsg');const inp=document.getElementById('pwIn');
+  if(!pw){inp.classList.add('err');err.classList.add('show');return}
+  btn.disabled=true;btn.textContent='Verifying…';
+  if(await sha256(pw)===HASH){sessionStorage.setItem('hh_client','1');document.getElementById('lock').style.display='none';document.getElementById('dash').style.display='block';}
+  else{inp.classList.add('err');err.classList.add('show');inp.parentElement.classList.add('shake');setTimeout(()=>inp.parentElement.classList.remove('shake'),320);btn.disabled=false;btn.textContent='View project';}
+}
+document.getElementById('pwIn').addEventListener('input',()=>{document.getElementById('pwIn').classList.remove('err');document.getElementById('errMsg').classList.remove('show');});
+document.getElementById('pwIn').addEventListener('keydown',e=>{if(e.key==='Enter')doUnlock()});
+function doLock(){sessionStorage.removeItem('hh_client');document.getElementById('dash').style.display='none';document.getElementById('lock').style.display='grid';document.getElementById('pwIn').value='';}
+function toggleEye(){const i=document.getElementById('pwIn');i.type=i.type==='password'?'text':'password';}
+function goPage(href){sessionStorage.setItem('hh_client','1');window.location.href=href;}
+if(sessionStorage.getItem('hh_client')==='1'){document.getElementById('lock').style.display='none';document.getElementById('dash').style.display='block';}
+async function doFeedback(){
+  const txt=document.getElementById('fbText').value.trim();if(!txt)return;
+  const btn=document.querySelector('.fb-btn');btn.disabled=true;btn.textContent='Sending…';
+  try{const r=await fetch('https://formspree.io/f/'+FSPREE,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({_subject:'Client Feedback — Harmony Horses',message:txt})});if(r.ok){btn.textContent='Sent';document.getElementById('fbOk').style.display='block';document.getElementById('fbText').value='';}else{btn.textContent='Failed — try again';btn.disabled=false;}}
+  catch{btn.textContent='Error — try again';btn.disabled=false;}
+}
+</script>
+</body>
+</html>
