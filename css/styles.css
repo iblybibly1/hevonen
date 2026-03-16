@@ -99,7 +99,7 @@ nav.solid .nav-right a.active { color: var(--gold); }
   transform: translateY(-8px);
   transition: opacity 0.25s, transform 0.25s;
 }
-.nav-dropdown:hover .dropdown-menu {
+.nav-dropdown.open .dropdown-menu {
   opacity: 1; pointer-events: auto; transform: translateY(0);
 }
 .dropdown-menu a {
