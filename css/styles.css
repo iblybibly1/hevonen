@@ -399,6 +399,32 @@ span.hero-link { pointer-events: none; }
   text-decoration: none; border-bottom: 1px solid var(--gold);
 }
 
+/* ─── CATEGORY STRIP ───────────────────────────────────── */
+.category-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 48px 40px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+.category-strip a {
+  font-size: 0.56rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding-bottom: 18px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.3s, border-color 0.3s;
+}
+.category-strip a:hover { color: var(--gold); }
+.category-strip a.active {
+  color: var(--text);
+  border-bottom-color: var(--gold);
+}
+
 /* ─── FOOTER ───────────────────────────────────────────── */
 .contact-footer {
   background: var(--white);
